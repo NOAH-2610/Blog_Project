@@ -1,37 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
+{% block title %}Register{% endblock %}
 
-<head>
-    <title>Register</title>
-</head>
-
-<body>
+{% block content %}
+<div class="container mt-5">
     <h2>Register</h2>
-    <form method="POST">
-        <label>Username:</label><br>
-        <input type="text" name="username" required><br><br>
+    <form method="POST" action="{{ url_for('register') }}">
+        <div class="mb-3">
+            <label class="form-label">Username:</label>
+            <input type="text" name="username" class="form-control" required>
+        </div>
 
-        <label>Email:</label><br>
-        <input type="email" name="email" required><br><br>
+        <div class="mb-3">
+            <label class="form-label">Email:</label>
+            <input type="email" name="email" class="form-control" required>
+        </div>
 
-        <label>Password:</label><br>
-        <input type="password" name="password" required><br><br>
+        <div class="mb-3">
+            <label class="form-label">Password:</label>
+            <input type="password" name="password" class="form-control" required>
+        </div>
 
-        <label>Confirm Password:</label><br>
-        <input type="password" name="confirm_password" required><br><br>
+        <div class="mb-3">
+            <label class="form-label">Confirm Password:</label>
+            <input type="password" name="confirm_password" class="form-control" required>
+        </div>
 
-        <button type="submit">Register</button>
+        <button type="submit" class="btn btn-success">Register</button>
     </form>
 
     {% with messages = get_flashed_messages() %}
         {% if messages %}
-        <ul>
-            {% for msg in messages %}
-            <li>{{ msg }}</li>
-            {% endfor %}
-        </ul>
+            <div class="alert alert-warning mt-3">
+                {% for msg in messages %}
+                    <div>{{ msg }}</div>
+                {% endfor %}
+            </div>
         {% endif %}
     {% endwith %}
-</body>
-
-</html>
+</div>
+{% endblock %}

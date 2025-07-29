@@ -1,29 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Login</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
     <h2>Login</h2>
-    <form method="POST">
-        <label>Username:</label><br>
-        <input type="text" name="username" required><br><br>
+    <form method="POST" action="{{ url_for('login') }}">
+        <div class="mb-3">
+            <label class="form-label">Username:</label>
+            <input type="text" name="username" class="form-control" required>
+        </div>
 
-        <label>Password:</label><br>
-        <input type="password" name="password" required><br><br>
+        <div class="mb-3">
+            <label class="form-label">Password:</label>
+            <input type="password" name="password" class="form-control" required>
+        </div>
 
-        <button type="submit">Login</button>
+        <button type="submit" class="btn btn-primary">Login</button>
     </form>
 
     {% with messages = get_flashed_messages() %}
         {% if messages %}
-        <ul>
-            {% for msg in messages %}
-            <li>{{ msg }}</li>
-            {% endfor %}
-        </ul>
+            <div class="alert alert-warning mt-3">
+                {% for msg in messages %}
+                    <div>{{ msg }}</div>
+                {% endfor %}
+            </div>
         {% endif %}
     {% endwith %}
-
-</body>
-</html>
+</div>
+{% endblock %}

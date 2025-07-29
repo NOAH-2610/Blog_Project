@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 import os
 from bson.objectid import ObjectId
 from datetime import datetime
+from routes import posts
 
 load_dotenv()
 
@@ -16,7 +17,7 @@ app.secret_key = os.getenv("SECRET_KEY")
 
 mongo = PyMongo(app)
 login_manager = LoginManager()
-login_manager.login_view = 'login' #Redirect to login page
+login_manager.login_view = 'login' # type: ignore
 login_manager.init_app(app)
 
 class User(UserMixin):
@@ -27,7 +28,7 @@ class User(UserMixin):
 
 @login_manager.user_loader
 def load_user(user_id):
-    user_data  = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+    user_data  = mongo.db.users.find_one({"_id": ObjectId(user_id)}) # type: ignore
     if user_data:
         return User(user_data)
     return None
@@ -35,8 +36,8 @@ def load_user(user_id):
 @app.route('/register', methods=['GET','POST'])
 def register():
     if request.method=='POST':
-        username = request.form.get('username').strip()
-        email = request.form.get('email').strip()
+        username = request.form.get('username').strip() # type: ignore
+        email = request.form.get('email').strip() # type: ignore
         password = request.form.get('password')
         confirm_password = request.form.get('confirm_password')
 
@@ -44,7 +45,7 @@ def register():
             flash("Passwords do not match!")
             return redirect(url_for('register'))
         
-        existing_user = mongo.db.users.find_one({
+        existing_user = mongo.db.users.find_one({ # type: ignore
             "$or": [{"username":username},{"email":email}]
         })
 
@@ -52,7 +53,7 @@ def register():
             flash("Username or email already exists!")
             return redirect(url_for('register'))
         
-        hashed_pw = generate_password_hash(password)
+        hashed_pw = generate_password_hash(password) # type: ignore
 
         new_user = {
             "username":username,
@@ -61,7 +62,7 @@ def register():
             "created_at":datetime.utcnow()
         }
 
-        mongo.db.users.insert_one(new_user)
+        mongo.db.users.insert_one(new_user) # type: ignore
         flash("Registration successful! Please log in.")
         return redirect(url_for('login'))
     
@@ -70,12 +71,12 @@ def register():
 @app.route('/login',methods=['GET','POST'])
 def login():
     if request.method == 'POST':
-        username = request.form.get('username').strip()
+        username = request.form.get('username').strip() # type: ignore
         password = request.form.get('password')
 
-        user_data = mongo.db.users.find_one({"username":username})
+        user_data = mongo.db.users.find_one({"username":username}) # type: ignore
         if user_data:
-            if check_password_hash(user_data['password'],password):
+            if check_password_hash(user_data['password'],password): # type: ignore
                 user = User(user_data)
                 login_user(user)
                 flash("Login Successful!")
